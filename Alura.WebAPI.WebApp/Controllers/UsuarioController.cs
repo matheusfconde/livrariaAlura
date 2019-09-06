@@ -48,7 +48,7 @@ namespace Alura.ListaLeitura.WebApp.Controllers
                     };
 
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal();
+                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                     return RedirectToAction("Index", "Home");
