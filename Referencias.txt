@@ -1,0 +1,2 @@
+https://github.com/microsoft/api-guidelines
+https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md#12-versioning

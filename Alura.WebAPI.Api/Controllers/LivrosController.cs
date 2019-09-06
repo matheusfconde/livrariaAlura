@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Alura.WebAPI.WebApp.Api
 {
     [Authorize]
+    [ApiVersion("1.0")]
     [ApiController]
-    [Route("api/[controller]")]
+    //[Route("api/Livros")]
+    [Route("api/v{version:apiVersion}/Livros")]
     public class LivrosController : ControllerBase
     {
         private readonly IRepository<Livro> _repo;
