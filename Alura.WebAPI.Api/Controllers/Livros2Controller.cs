@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Alura.WebAPI.WebApp.Api
 {
-    //[Authorize]
+    [Authorize]
     [ApiVersion("2.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/Livros")]
@@ -25,7 +25,7 @@ namespace Alura.WebAPI.WebApp.Api
 
         [HttpGet]
         public IActionResult ListaDeLivros(
-            [FromQuery] LivroFiltro filtro, 
+            [FromQuery] LivroFiltro filtro,
             [FromQuery] LivroOrdem ordem,
             [FromQuery] LivroPaginacao paginacao)
         {
@@ -69,7 +69,15 @@ namespace Alura.WebAPI.WebApp.Api
             if (ModelState.IsValid)
             {
                 var livro = model.ToLivro();
-                _repo.Incluir(livro);
+                try
+                {
+                    _repo.Incluir(livro);
+                }
+                catch (Exception e )
+                {
+                    var errorResponse = ErrorResponse.From(e);
+                    return StatusCode(500, errorResponse);
+                }
                 var uri = Url.Action("Recuperar", new { id = livro.Id });
                 return Created(uri, livro); //201
             }
