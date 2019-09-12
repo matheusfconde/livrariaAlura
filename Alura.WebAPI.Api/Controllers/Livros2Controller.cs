@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alura.ListaLeitura.Modelos;
 using Alura.ListaLeitura.Persistencia;
+using Alura.WebAPI.Api.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Alura.WebAPI.WebApp.Api
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion("2.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/Livros")]
@@ -23,10 +24,18 @@ namespace Alura.WebAPI.WebApp.Api
         }
 
         [HttpGet]
-        public IActionResult ListaDeLivros()
+        public IActionResult ListaDeLivros(
+            [FromQuery] LivroFiltro filtro, 
+            [FromQuery] LivroOrdem ordem,
+            [FromQuery] LivroPaginacao paginacao)
         {
-            var lista = _repo.All.Select(l => l.ToApi()).ToList();
-            return Ok(lista);
+            var livroPaginado = _repo.All
+                .AplicaFiltro(filtro)
+                .AplicaOrdem(ordem)
+                .Select(l => l.ToApi())
+                .ToLivroPaginado(paginacao);
+
+            return Ok(livroPaginado);
         }
 
         [HttpGet("{id}")]
