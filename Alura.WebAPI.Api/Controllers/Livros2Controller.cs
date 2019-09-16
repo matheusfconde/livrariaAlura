@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Alura.WebAPI.WebApp.Api
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion("2.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/Livros")]
@@ -73,7 +73,7 @@ namespace Alura.WebAPI.WebApp.Api
                 var uri = Url.Action("Recuperar", new { id = livro.Id });
                 return Created(uri, livro); //201
             }
-            return BadRequest();
+            return BadRequest(ErrorResponse.FromModelState(ModelState));
         }
 
         [HttpPut]

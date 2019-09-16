@@ -13,6 +13,8 @@ using Alura.ListaLeitura.Modelos;
 using lura.ListaLeitura.Api.Formatters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Alura.WebAPI.Api.Filtros;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Alura.WebAPI.Api
 {
@@ -39,7 +41,13 @@ namespace Alura.WebAPI.Api
             services.AddMvc(options =>
             {
                 options.OutputFormatters.Add(new LivroCsvFormatter());
+                options.Filters.Add(typeof(ErrorResponseFilter));
             }).AddXmlSerializerFormatters();
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
             services.AddAuthentication(options =>
             {
