@@ -1,0 +1,47 @@
+git clone URI | CLONAR DO SERVIDOR PARA MÁQUINA LOCAL
+git tag | para verificar as versões que estão no repositorio.
+git checkout | para pegar a versão do código que está disponível no repositório.
+git diff v0.1 v0.2 | pegar a diferença dos códigos nas versões
+
+git ls-files | verificar quais arquiviso estão sendo monitorados pelo git
+git status | verifica situação da pasta
+git add NOME DO ARQUIVO | para adicionar para ser controlado.
+git commit -m "Criando Projeto" | dando commit nas alterações
+
+git config user.name "nome"
+git config user.email "email@email.com"
+
+git whatchanged para saber as alterações
+git remote add origin https://github.com/matheusfconde/cursoGit.git
+git push origin master
+
+O comando git mergetool --tool-help mostra no console uma lista de programas possíveis de ser utilizados.
+Dessa lista, pode-se escolher um, instalar no seu computador e
+ utilizar através do comando git mergetool -t nome_do_programa.
+
+
+Se simplesmente jogássemos o conteúdo da branch "desenvolvimento" para a master, poderíamos ter que tratar 
+conflitos de vários commits ao mesmo tempo além do log dos commits ficarem confusos. Justamente para evitar 
+essa situação, o Git possui o comando git rebase, onde podemos indicar qual é a nova base de commits que deve ser 
+utilizada e resolver os conflitos commit por commit. No nosso caso, queremos que a
+branch "desenvolvimento" utilize como base de commits a "master" que acabamos de atualizar.
+
+
+git rebase --continue para continuar o rebase apos o conflito
+
+Para utilizá-lo, primeiro é preciso ir para a branch para a qual se quer levar os commits, no caso, 
+a "master" (git checkout master). Em seguida, deve-se dizer para o comando git merge de qual branch virão os
+commits novos, que, no caso, é a branch "desenvolvimento". Para isso, basta executar git merge desenvolvimento.
+
+
+
+Basicamente, o que o rebase faz é reproduzir, commit por commit, as ações que você desejar. No nosso caso, reproduzindo os novos commits de master no branch feature.
+
+E se você não se sente confortável com o Git Rebase, você pode treinar o Rebase em um branch temporário. Assim, se você fizer besteira, você pode tentar de novo fazendo um checkout do branch original:
+
+git checkout feature
+git checkout -b temporary-branch
+git rebase -i master
+# [Clean up the history]
+git checkout master
+git merge temporary-branch

@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Alura.WebAPI.Api.Filtros;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Alura.WebAPI.Api
 {
@@ -69,13 +70,45 @@ namespace Alura.WebAPI.Api
             });
 
             services.AddApiVersioning();
-            //services.AddApiVersioning(options =>
-            //{
-            //    options.ApiVersionReader = ApiVersionReader.Combine(
-            //        new QueryStringApiVersionReader("api-version"),
-            //        new HeaderApiVersionReader("api-version")
-            //        );
-            //});
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Livros API",
+                    Description = "Documentação da API de livros",
+                    Version = "1.0"
+                });
+                c.SwaggerDoc("v2", new Info
+                {
+                    Title = "Livros API",
+                    Description = "Documentação da API de livros",
+                    Version = "2.0"
+                });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.EnableAnnotations();
+
+                //definição do esquema de segurança utilizado
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey",
+                    Description = "Autenticação Bearer via JWT"
+                });
+
+                //que operações usam o esquema acima - todas
+                c.AddSecurityRequirement(
+                    new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", new string[] { } }
+                    });
+
+                //descrevendo enumerados como strings
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeStringEnumsInCamelCase();
+            });
+
+ 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +122,14 @@ namespace Alura.WebAPI.Api
             app.UseAuthentication();
 
             app.UseMvc();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versão 1.0");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Versão 2.0");
+            });
         }
     }
 }

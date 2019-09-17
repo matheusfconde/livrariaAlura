@@ -10,9 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Alura.WebAPI.WebApp.Api
 {
-    //[Authorize]
-    [ApiVersion("2.0")]
+    [Authorize]
     [ApiController]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName ="v2")]
     [Route("api/v{version:apiVersion}/Livros")]
     public class Livros2Controller : ControllerBase
     {

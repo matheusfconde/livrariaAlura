@@ -4,15 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alura.ListaLeitura.Modelos;
 using Alura.ListaLeitura.Persistencia;
+using Alura.WebAPI.Api.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alura.WebAPI.WebApp.Api
 {
     [Authorize]
-    [ApiVersion("1.0")]
     [ApiController]
-    //[Route("api/Livros")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/v{version:apiVersion}/Livros")]
     public class LivrosController : ControllerBase
     {
@@ -31,6 +33,14 @@ namespace Alura.WebAPI.WebApp.Api
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(
+            Summary = "Recupera o livro identificado por seu {id}.",
+            Tags = new[] { "Livros333" },
+            Produces = new[] { "application/json", "application/xml" }
+        )]
+        [ProducesResponseType(statusCode: 200, Type = typeof(LivroApi))]
+        [ProducesResponseType(statusCode: 500, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(statusCode: 404)]
         public IActionResult Recuperar(int id)
         {
             var model = _repo.Find(id);
@@ -56,6 +66,7 @@ namespace Alura.WebAPI.WebApp.Api
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Registra novo livro na base.")]
         public IActionResult Incluir([FromForm] LivroUpload model)
         {
             if (ModelState.IsValid)
